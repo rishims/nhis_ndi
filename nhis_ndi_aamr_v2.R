@@ -18,7 +18,7 @@ library(tidyr)
 library(ggplot2)
 
 # read in NHIS data
-df <- fread('/Users/rishishah/Downloads/nhis_ndi_86-18.csv')
+df <- fread('nhis_ndi_86-18.csv')
 names(df) <- tolower(names(df))
 
 # keeping only those eligible for mortality follow-up
