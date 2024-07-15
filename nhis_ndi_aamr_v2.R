@@ -2,16 +2,9 @@
 # Rishi Shah
 
 # load necessary libraries
-library(data.table)
 library(foreign)
-library(dplyr)
 library(survey)
 library(srvyr)
-library(data.table)
-library(epiDisplay)
-library(ggplot2)
-library(gtsummary)
-library(gt)
 library(data.table)
 library(dplyr)
 library(tidyr)
