@@ -1,3 +1,6 @@
+# NHIS-NDI AAMR
+# Rishi Shah
+
 # load necessary libraries
 library(data.table)
 library(foreign)
