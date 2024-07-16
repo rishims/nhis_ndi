@@ -86,7 +86,7 @@ calculate_age_adjusted_rate_survey <- function(target_year, df, age_shares) {
       age_target >= 50 & age_target <= 59 ~ 4,
       age_target >= 60 & age_target <= 69 ~ 5,
       age_target >= 70 & age_target <= 79 ~ 6,
-      age_target >= 80 & age_target < 100 ~ 7, # NCHS recommends excluding anyone above the age of 100 has probability of survival to that age is low
+      age_target >= 80 & age_target < 100 ~ 7, # NCHS recommends excluding anyone above the age of 100 because probability of survival to that age is low
       age_target >= 100 ~ NA_integer_,
       TRUE ~ NA_integer_
     ))
