@@ -15,9 +15,9 @@ df <- fread('nhis_ndi_86-18.csv')
 names(df) <- tolower(names(df))
 
 # keeping only those eligible for mortality follow-up
-# df <- df[df$astatflg == 1, ] # superfluous
+# df <- df[df$astatflg == 1, ] # if using sample adults only
 df <- df[df$mortelig == 1, ] # can do this here or within the function
-df$mortwtsa <- ifelse(df$year < 1997, df$mortwt, df$mortwtsa) # crosswalk mortality weights from year < 1997
+df$mortwtsa <- ifelse(df$year < 2015, df$mortwt, df$mortwtsa) # crosswalk mortality weights from year < 2015
 
 ######################################
 # 1. Independent Variables           #
@@ -76,9 +76,13 @@ calculate_age_adjusted_rate_survey <- function(target_year, df, age_shares) {
   # subset data for the mortality year including relevant previous years and exclude individuals who died before the target year
   df_target <- df %>% filter(year <= target_year & mortelig == 1 & !is.na(mortdody) & !(mortdody < target_year))
   
-  # adjust age for each respondent to their age at the target year
+   # adjust age for each respondent to their age at the target year
   df_target <- df_target %>% 
-    mutate(age_target = age + (target_year - year)) %>% 
+    mutate(age_target = age + (target_year - year))
+  
+  df_target <- df_target %>% filter(age_target <= 100) # NCHS recommends excluding anyone above the age of 100 has probability of survival to that age is low
+  
+  df_target <- df_target %>% 
     mutate(age_target_cat = case_when(
       age_target >= 18 & age_target <= 29 ~ 1,
       age_target >= 30 & age_target <= 39 ~ 2,
@@ -86,10 +90,10 @@ calculate_age_adjusted_rate_survey <- function(target_year, df, age_shares) {
       age_target >= 50 & age_target <= 59 ~ 4,
       age_target >= 60 & age_target <= 69 ~ 5,
       age_target >= 70 & age_target <= 79 ~ 6,
-      age_target >= 80 & age_target < 100 ~ 7, # NCHS recommends excluding anyone above the age of 100 because probability of survival to that age is low
-      age_target >= 100 ~ NA_integer_,
+      age_target >= 80 & age_target <= 100 ~ 7, 
       TRUE ~ NA_integer_
     ))
+  
   # optional: filter for just Black and White races
   df_target <- df_target %>% filter(race %in% c("NH Black", "NH White"))
   
